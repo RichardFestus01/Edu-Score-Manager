@@ -1,0 +1,237 @@
+:root {
+    --primary-color: #4f46e5;
+    --secondary-color: #10b981;
+    --bg-color: #f9fafb;
+    --text-color: #111827;
+    --card-bg: #ffffff;
+    --border-color: #e5e7eb;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h1 { margin-bottom: 5px; color: var(--primary-color); }
+p { color: #6b7280; margin-top: 0; }
+
+.form-card, .table-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+}
+
+.student-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.student-header div {
+    display: flex;
+    gap: 10px;
+}
+
+input#studentName {
+    font-weight: 600;
+    font-size: 16px;
+    flex: 1;
+}
+
+.input-group {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 15px;
+    align-items: start;
+    margin-bottom: 20px;
+}
+
+.settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+input, select {
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+input:focus, select:focus {
+    outline: 2px solid var(--primary-color);
+    border-color: transparent;
+}
+
+select {
+    width: 100%;
+    background-color: white;
+    cursor: pointer;
+}
+
+#customSubject {
+    margin-top: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.btn-primary, .btn-secondary, .btn-outline {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary { background: var(--primary-color); color: white; }
+.btn-primary:hover { background: #4338ca; }
+
+.btn-outline {
+    background: transparent;
+    color: #6b7280;
+    border: 1px solid var(--border-color);
+}
+.btn-outline:hover { background: #f3f4f6; }
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn-secondary { 
+    background: white; 
+    color: var(--primary-color); 
+    border: 1px solid var(--primary-color); 
+    margin-top: 20px;
+}
+.btn-secondary:hover { background: #f5f3ff; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    text-align: left;
+    background: #f3f4f6;
+    padding: 12px;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 15px;
+}
+
+.student-group-row td {
+    background: #f3f4f6;
+    font-weight: 700;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.student-average-row td {
+    background: #f8fafc;
+    border-top: 1px solid var(--border-color);
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+.average-row td {
+    background: #f9fafb;
+    border-top: 2px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.spacer-row td {
+    height: 35px;
+    border: none !important;
+    background: transparent !important;
+}
+
+.btn-edit {
+    background: #e0e7ff;
+    color: #4338ca;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+    margin-right: 5px;
+}
+.btn-edit:hover { background: #c7d2fe; }
+
+.btn-print {
+    background: #fef3c7;
+    color: #92400e;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+    margin-right: 5px;
+}
+.btn-print:hover { background: #fde68a; }
+
+.btn-delete {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.2s;
+}
+.btn-delete:hover { background: #fecaca; }
+
+.grade-pill {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+    display: inline-block;
+}
+
+ .grade-A { background: #d1fae5; color: #065f46; }
+ .grade-B { background: #dbeafe; color: #1e40af; }
+ .grade-C { background: #fef3c7; color: #92400e; }
+ .grade-D { background: #ffedd5; color: #9a3412; }
+ .grade-E { background: #ffedd5; color: #9a3412; }
+ .grade-F { background: #fee2e2; color: #991b1b; }
+
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    font-size: 10px;
+    color: #9ca3af;
+    letter-spacing: 0.05em;
+}

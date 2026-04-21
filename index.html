@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduScore Manager - Academic Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>EduScore Manager</h1>
+            <p>Input CA (30%) and Exam (70%) scores to generate results.</p>
+        </header>
+
+        <section class="form-card">
+            <h2 style="font-size: 1rem; margin-bottom: 15px; color: var(--primary-color);">School Information</h2>
+            <div class="settings-grid">
+                <input type="text" id="schoolName" placeholder="Name of School">
+                <input type="text" id="schoolAddress" placeholder="Address of School">
+                <input type="text" id="schoolMotto" placeholder="School Motto">
+                <select id="schoolClass">
+                    <option value="" disabled selected>Select Class</option>
+                    <optgroup label="Junior Secondary">
+                        <option value="JSS 1A">JSS 1A</option><option value="JSS 1B">JSS 1B</option><option value="JSS 1C">JSS 1C</option><option value="JSS 1D">JSS 1D</option><option value="JSS 1E">JSS 1E</option><option value="JSS 1F">JSS 1F</option>
+                        <option value="JSS 2A">JSS 2A</option><option value="JSS 2B">JSS 2B</option><option value="JSS 2C">JSS 2C</option><option value="JSS 2D">JSS 2D</option><option value="JSS 2E">JSS 2E</option><option value="JSS 2F">JSS 2F</option>
+                        <option value="JSS 3A">JSS 3A</option><option value="JSS 3B">JSS 3B</option><option value="JSS 3C">JSS 3C</option><option value="JSS 3D">JSS 3D</option><option value="JSS 3E">JSS 3E</option><option value="JSS 3F">JSS 3F</option>
+                    </optgroup>
+                    <optgroup label="Senior Secondary">
+                        <option value="SSS 1A">SSS 1A</option><option value="SSS 1B">SSS 1B</option><option value="SSS 1C">SSS 1C</option><option value="SSS 1D">SSS 1D</option><option value="SSS 1E">SSS 1E</option><option value="SSS 1F">SSS 1F</option>
+                        <option value="SSS 2A">SSS 2A</option><option value="SSS 2B">SSS 2B</option><option value="SSS 2C">SSS 2C</option><option value="SSS 2D">SSS 2D</option><option value="SSS 2E">SSS 2E</option><option value="SSS 2F">SSS 2F</option>
+                        <option value="SSS 3A">SSS 3A</option><option value="SSS 3B">SSS 3B</option><option value="SSS 3C">SSS 3C</option><option value="SSS 3D">SSS 3D</option><option value="SSS 3E">SSS 3E</option><option value="SSS 3F">SSS 3F</option>
+                    </optgroup>
+                </select>
+                <input type="text" id="currentTerm" placeholder="Term (e.g. First Term)">
+                <input type="text" id="currentSession" placeholder="Session (e.g. 2023/2024)">
+                <div style="display: flex; align-items: center; gap: 10px; grid-column: 1 / -1; margin-top: 5px;">
+                    <input type="checkbox" id="showOverallPos" style="width: auto; cursor: pointer;">
+                    <label for="showOverallPos" style="font-size: 14px; color: var(--text-color); cursor: pointer;">Show Overall Class Position on Report Card</label>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-card">
+            <form id="result-form">
+                <h2 style="font-size: 1rem; margin-bottom: 15px; color: var(--primary-color);">Student Information</h2>
+                <div class="student-header">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <input type="text" id="studentName" placeholder="Student Name" required list="studentNamesList" style="flex: 2; min-width: 200px;">
+                        <input type="text" id="regNo" placeholder="Reg No/ID" style="flex: 1; min-width: 120px;">
+                        <select id="gender" style="flex: 1; min-width: 100px;">
+                            <option value="" disabled selected>Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                        <input type="number" id="age" placeholder="Age" style="flex: 0.5; min-width: 70px;">
+                        <input type="text" id="stateOfOrigin" placeholder="State" style="flex: 1; min-width: 120px;">
+                        <input type="text" id="height" placeholder="H (cm)" style="flex: 0.5; min-width: 80px;">
+                        <input type="text" id="weight" placeholder="W (kg)" style="flex: 0.5; min-width: 80px;">
+                        <button type="button" id="clearNameBtn" class="btn-outline" style="width: auto; padding: 0 15px;">Clear</button>
+                    </div>
+                    <datalist id="studentNamesList"></datalist>
+                </div>
+                <div class="input-group">
+                    <div class="subject-container">
+                        <select id="subjectSelect" required>
+                            <option value="" disabled selected>Select Subject</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Agricultural Science">Agricultural Science</option>
+                            <option value="Arabic">Arabic</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Christian Religious Studies">Christian Religious Studies</option>
+                            <option value="Civic Education">Civic Education</option>
+                            <option value="Commerce">Commerce</option>
+                            <option value="Computer Studies/ICT">Computer Studies/ICT</option>
+                            <option value="Data Processing">Data Processing</option>
+                            <option value="Economics">Economics</option>
+                            <option value="English Language">English Language</option>
+                            <option value="Financial Accounting">Financial Accounting</option>
+                            <option value="French">French</option>
+                            <option value="Further Mathematics">Further Mathematics</option>
+                            <option value="Geography">Geography</option>
+                            <option value="Government">Government</option>
+                            <option value="Hausa">Hausa</option>
+                            <option value="History">History</option>
+                            <option value="Home Economics">Home Economics</option>
+                            <option value="Igbo">Igbo</option>
+                            <option value="Islamic Religious Studies">Islamic Religious Studies</option>
+                            <option value="Literature-in-English">Literature-in-English</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Music">Music</option>
+                            <option value="Physical and Health Education">Physical and Health Education</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Social Studies">Social Studies</option>
+                            <option value="Technical Drawing">Technical Drawing</option>
+                            <option value="Visual Arts">Visual Arts</option>
+                            <option value="Yoruba">Yoruba</option>
+                            <option value="Other">Other...</option>
+                        </select>
+                        <input type="text" id="customSubject" placeholder="Enter Subject Name" style="display: none;">
+                    </div>
+                    <input type="number" id="caScore" placeholder="CA (Max 30)" min="0" max="30" step="0.1">
+                    <input type="number" id="examScore" placeholder="Exam (Max 70)" min="0" max="70" step="0.1">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Add Subject Score</button>
+                    <button type="button" id="registerStudentBtn" class="btn-secondary" style="margin-top: 10px;">Register Student Only</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="table-card">
+            <table id="results-table">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>CA (30)</th>
+                        <th>Exam (70)</th>
+                        <th>Total (100)</th>
+                        <th>Grade</th>
+                        <th>Pos</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr class="average-row">
+                        <td colspan="4" style="text-align: right; font-weight: bold;">Overall Average:</td>
+                        <td id="overall-average" colspan="2" style="font-weight: bold; color: var(--primary-color);">0.00%</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button id="download-csv" class="btn-secondary">Download Current Class CSV</button>
+            <button id="download-all-csv" class="btn-secondary" style="margin-top: 10px;">Download Overall CSV (All Classes)</button>
+        </section>
+
+        <footer>
+            <p>Designed & Developed by Emuemukoro Festus | April 2026</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
