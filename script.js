@@ -11,6 +11,65 @@ const clearNameBtn = document.getElementById('clearNameBtn');
 let students = JSON.parse(localStorage.getItem('academicResults')) || [];
 let editingId = null;
 
+function createTraitRow(containerId, name = '', rating = '') {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const row = document.createElement('div');
+    row.className = 'trait-row';
+    row.style = 'display: flex; justify-content: space-between; align-items: center; gap: 5px;';
+    row.innerHTML = `
+        <input type="text" class="trait-name" value="${name}" placeholder="Skill Name" style="flex: 1; font-size: 12px; padding: 4px; border: 1px solid #ddd; border-radius: 4px;">
+        <input type="number" class="trait-rating" min="1" max="5" value="${rating}" style="width: 45px; padding: 4px; border: 1px solid #ddd; border-radius: 4px;" placeholder="1-5">
+        <button type="button" onclick="this.parentElement.remove()" style="background:none; border:none; color: #ef4444; cursor:pointer; font-weight:bold; padding: 0 5px; font-size: 18px;">&times;</button>
+    `;
+    container.appendChild(row);
+}
+
+window.addTraitRow = function(containerId) {
+    createTraitRow(containerId);
+};
+
+function getTraitValues() {
+    const traits = { affective: [], psychomotor: [] };
+    document.querySelectorAll('#affective-list .trait-row').forEach(row => {
+        const name = row.querySelector('.trait-name').value.trim();
+        const rating = row.querySelector('.trait-rating').value;
+        if (name) traits.affective.push({ name, rating });
+    });
+    document.querySelectorAll('#psychomotor-list .trait-row').forEach(row => {
+        const name = row.querySelector('.trait-name').value.trim();
+        const rating = row.querySelector('.trait-rating').value;
+        if (name) traits.psychomotor.push({ name, rating });
+    });
+    return traits;
+}
+
+function setTraitValues(traits = {}) {
+    const affList = document.getElementById('affective-list');
+    const psyList = document.getElementById('psychomotor-list');
+    if (!affList || !psyList) return;
+
+    affList.innerHTML = '';
+    psyList.innerHTML = '';
+
+    const defaultAff = ['Punctuality', 'Neatness', 'Honesty', 'Self Control', 'Relationship'];
+    const defaultPsy = ['Handwriting', 'Fluency/Speech', 'Games/Sports', 'Crafts/Arts', 'Musical Skills'];
+
+    let affData = traits.affective;
+    let psyData = traits.psychomotor;
+
+    // Migration logic for old static format
+    if (!Array.isArray(affData)) {
+        affData = defaultAff.map(n => ({ name: n, rating: traits[n.toLowerCase().replace(/\s+/g, '')] || '' }));
+    }
+    if (!Array.isArray(psyData)) {
+        psyData = defaultPsy.map(n => ({ name: n, rating: traits[n.toLowerCase().replace(/\s+/g, '').replace('/', '')] || '' }));
+    }
+
+    affData.forEach(t => createTraitRow('affective-list', t.name, t.rating));
+    psyData.forEach(t => createTraitRow('psychomotor-list', t.name, t.rating));
+}
+
 function saveData() {
     localStorage.setItem('academicResults', JSON.stringify(students));
     updateNameDatalist();
@@ -31,6 +90,7 @@ function updateNameDatalist() {
 
 clearNameBtn.addEventListener('click', () => {
     document.getElementById('studentName').value = '';
+    setTraitValues({});
     document.getElementById('studentName').focus();
 });
 
@@ -56,6 +116,7 @@ resultForm.addEventListener('submit', (e) => {
     const state = document.getElementById('stateOfOrigin').value;
     const height = document.getElementById('height').value;
     const weight = document.getElementById('weight').value;
+    const traits = getTraitValues();
 
     let subject = subjectSelect.value;
     if (subject === 'Other') {
@@ -87,7 +148,7 @@ resultForm.addEventListener('submit', (e) => {
     if (editingId) {
         const index = students.findIndex(s => s.id === editingId);
         if (index !== -1) {
-            students[index] = { ...students[index], name, className, regNo, gender, age, state, height, weight, subject, ca, exam, total, grade, examAdded };
+            students[index] = { ...students[index], name, className, regNo, gender, age, state, height, weight, subject, ca, exam, total, grade, examAdded, traits };
         }
         editingId = null;
         resultForm.querySelector('button[type="submit"]').textContent = 'Add Subject Score';
@@ -95,9 +156,16 @@ resultForm.addEventListener('submit', (e) => {
         // Remove registration placeholder if it exists before adding actual score
         students = students.filter(s => !(s.name === name && s.className === className && s.subject === null));
         
-        const student = { id: Date.now(), name, className, regNo, gender, age, state, height, weight, subject, ca, exam, total, grade, examAdded };
+        const student = { id: Date.now(), name, className, regNo, gender, age, state, height, weight, subject, ca, exam, total, grade, examAdded, traits };
         students.push(student);
     }
+
+    // Sync traits across all records for this student in this class
+    students.forEach(s => {
+        if (s.name === name && s.className === className) {
+            s.traits = traits;
+        }
+    });
 
     refreshTable();
     updateAverage();
@@ -135,8 +203,14 @@ registerStudentBtn.addEventListener('click', () => {
     const state = document.getElementById('stateOfOrigin').value;
     const height = document.getElementById('height').value;
     const weight = document.getElementById('weight').value;
+    const traits = getTraitValues();
 
-    const studentProfile = { id: Date.now(), name, className, regNo, gender, age, state, height, weight, subject: null, ca: 0, exam: 0, total: 0, grade: '', examAdded: false };
+    const studentProfile = { 
+        id: Date.now(), name, className, regNo, gender, age, state, height, weight, 
+        subject: null, ca: 0, exam: 0, total: 0, grade: '', examAdded: false,
+        traits: traits
+    };
+    
     students.push(studentProfile);
     
     refreshTable();
@@ -149,6 +223,7 @@ registerStudentBtn.addEventListener('click', () => {
     document.getElementById('stateOfOrigin').value = '';
     document.getElementById('height').value = '';
     document.getElementById('weight').value = '';
+    setTraitValues({}); // Clear traits
     clearNameBtn.click();
 });
 
@@ -255,6 +330,7 @@ function selectStudent(name) {
         document.getElementById('stateOfOrigin').value = bio.state || '';
         document.getElementById('height').value = bio.height || '';
         document.getElementById('weight').value = bio.weight || '';
+        setTraitValues(bio.traits);
     }
     subjectSelect.focus();
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -269,11 +345,28 @@ function printStudentReport(name) {
     const term = getVal('currentTerm');
     const session = getVal('currentSession');
     const showOverallPos = document.getElementById('showOverallPos').checked;
+    const schoolLogo = localStorage.getItem('schoolLogo');
 
     const currentClass = document.getElementById('schoolClass').value;
     const studentEntries = students.filter(s => s.name === name && s.className === currentClass && s.subject !== null);
     if (studentEntries.length === 0) return;
     const bio = studentEntries[0];
+    const traits = bio.traits || {};
+
+    // Traits logic for dynamic rows in report
+    const getTraitRowsHtml = (traitList, isAff) => {
+        let entries = Array.isArray(traitList) ? traitList : [];
+        // Fallback for un-migrated records if any
+        if (entries.length === 0 && !Array.isArray(traitList)) return '';
+        
+        let html = '';
+        entries.forEach(t => {
+            html += `<tr><td style="text-align:left">${t.name}</td><td style="width:40px">${t.rating || ''}</td></tr>`;
+        });
+        // Pad with empty rows if less than 5
+        for (let i = entries.length; i < 5; i++) html += '<tr><td style="text-align:left">&nbsp;</td><td></td></tr>';
+        return html;
+    };
 
     // Overall Class Positioning Logic
     let overallPosHtml = '';
@@ -351,7 +444,10 @@ function printStudentReport(name) {
                         pointer-events: none;
                     }
 
-                    .header { text-align: center; border-bottom: 2px solid #4f46e5; padding-bottom: 8px; margin-bottom: 15px; position: relative; z-index: 1; }
+                    .header { display: flex; align-items: center; justify-content: center; gap: 25px; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 20px; position: relative; z-index: 1; }
+                    .header { display: flex; align-items: center; justify-content: center; gap: 15px; border-bottom: 3px solid #4f46e5; padding-bottom: 12px; margin-bottom: 20px; position: relative; z-index: 1; }
+                    .logo-img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid #4f46e5; flex-shrink: 0; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+                    .header-text { text-align: center; }
                     .header h1 { color: #4f46e5; margin: 0; font-size: 24px; text-transform: uppercase; letter-spacing: 1.5px; }
                     .header p { margin: 3px 0; font-weight: 600; font-size: 14px; }
                     .motto { font-style: italic; color: #6b7280; font-size: 12px; margin-bottom: 5px; }
@@ -397,9 +493,12 @@ function printStudentReport(name) {
             <body>
                 <div class="report-wrapper">
                     <div class="header">
-                        <h1>${schoolName}</h1>
-                        <p>${schoolAddress}</p>
-                        ${schoolMotto ? `<p class="motto">"${schoolMotto}"</p>` : ''}
+                        ${schoolLogo ? `<img src="${schoolLogo}" class="logo-img">` : ''}
+                        <div class="header-text">
+                            <h1>${schoolName}</h1>
+                            <p>${schoolAddress}</p>
+                            ${schoolMotto ? `<p class="motto">"${schoolMotto}"</p>` : ''}
+                        </div>
                     </div>
 
                     <div class="report-title">STUDENT ACADEMIC PROGRESS REPORT</div>
@@ -413,6 +512,8 @@ function printStudentReport(name) {
                         <div class="info-item"><strong>GENDER:</strong> ${bio.gender || '---'}</div>
                         <div class="info-item"><strong>AGE:</strong> ${bio.age || '---'}</div>
                         <div class="info-item"><strong>STATE:</strong> ${bio.state || '---'}</div>
+                        <div class="info-item"><strong>HEIGHT:</strong> ${bio.height ? bio.height + ' cm' : '---'}</div>
+                        <div class="info-item"><strong>WEIGHT:</strong> ${bio.weight ? bio.weight + ' kg' : '---'}</div>
                         ${overallPosHtml}
                     </div>
 
@@ -452,21 +553,13 @@ function printStudentReport(name) {
                         <div class="traits-table">
                             <h4>Affective Development</h4>
                             <table>
-                                <tr><td style="text-align:left">Punctuality</td><td style="width:40px"></td></tr>
-                                <tr><td style="text-align:left">Neatness</td><td></td></tr>
-                                <tr><td style="text-align:left">Honesty</td><td></td></tr>
-                                <tr><td style="text-align:left">Self Control</td><td></td></tr>
-                                <tr><td style="text-align:left">Relationship with Others</td><td></td></tr>
+                                ${getTraitRowsHtml(traits.affective, true)}
                             </table>
                         </div>
                         <div class="traits-table">
                             <h4>Psychomotor Skills</h4>
                             <table>
-                                <tr><td style="text-align:left">Handwriting</td><td style="width:40px"></td></tr>
-                                <tr><td style="text-align:left">Fluency/Speech</td><td></td></tr>
-                                <tr><td style="text-align:left">Games/Sports</td><td></td></tr>
-                                <tr><td style="text-align:left">Crafts/Arts</td><td></td></tr>
-                                <tr><td style="text-align:left">Musical Skills</td><td></td></tr>
+                                ${getTraitRowsHtml(traits.psychomotor, false)}
                             </table>
                         </div>
                     </div>
@@ -478,7 +571,7 @@ function printStudentReport(name) {
                     <div class="signatures">
                         <div class="sig-block">
                             <div class="sig-line"></div>
-                            <p>CLASS TEACHER</p>
+                            <p>CLASS TEACHER REMARK</p>
                         </div>
                         <div class="sig-block">
                             <div class="sig-line"></div>
@@ -504,6 +597,7 @@ function editEntry(id) {
     document.getElementById('stateOfOrigin').value = student.state || '';
     document.getElementById('height').value = student.height || '';
     document.getElementById('weight').value = student.weight || '';
+    setTraitValues(student.traits);
     
     const options = Array.from(subjectSelect.options).map(opt => opt.value);
     if (options.includes(student.subject)) {
@@ -696,9 +790,26 @@ function setupSchoolSettings() {
                 refreshTable();
                 updateAverage();
                 updateNameDatalist();
+                setTraitValues({});
             }
         });
     });
+
+    // Special handling for the Logo upload
+    const logoInput = document.getElementById('schoolLogo');
+    if (logoInput) {
+        logoInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    localStorage.setItem('schoolLogo', event.target.result);
+                    alert("School logo uploaded and saved successfully!");
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
 }
 
 // Initial load to render saved data
@@ -706,3 +817,4 @@ setupSchoolSettings();
 refreshTable();
 updateAverage();
 updateNameDatalist();
+setTraitValues({});
