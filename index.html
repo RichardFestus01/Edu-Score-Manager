@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>EduScore Manager</h1>
+            <h1>EDUSCORE RESULT MAKER</h1>
             <p>Input CA (30%) and Exam (70%) scores to generate results.</p>
         </header>
 
@@ -39,6 +39,10 @@
                     <input type="checkbox" id="showOverallPos" style="width: auto; cursor: pointer;">
                     <label for="showOverallPos" style="font-size: 14px; color: var(--text-color); cursor: pointer;">Show Overall Class Position on Report Card</label>
                 </div>
+                <div style="grid-column: 1 / -1; margin-top: 5px;">
+                    <label for="schoolLogo" style="font-size: 14px; color: var(--text-color); display: block; margin-bottom: 5px;">Upload School Logo:</label>
+                    <input type="file" id="schoolLogo" accept="image/*" style="font-size: 12px; border: none; padding: 0;">
+                </div>
             </div>
         </section>
 
@@ -62,6 +66,31 @@
                     </div>
                     <datalist id="studentNamesList"></datalist>
                 </div>
+
+                <!-- Domain Ratings Section -->
+                <div class="traits-container" style="margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <h3 style="font-size: 0.9rem; margin-bottom: 15px; color: var(--primary-color); border-bottom: 2px solid #e2e8f0; padding-bottom: 5px;">Domain Ratings (1-5)</h3>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div>
+                            <h4 style="font-size: 0.8rem; margin-bottom: 10px; color: #64748b;">Affective Development</h4>
+                            <div id="affective-list" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Dynamic rows added by JS -->
+                            </div>
+                            <button type="button" onclick="addTraitRow('affective-list')" class="btn-outline" style="margin-top: 10px; font-size: 11px; width: 100%;">+ Add Affective Skill</button>
+                        </div>
+                        <div>
+                            <h4 style="font-size: 0.8rem; margin-bottom: 10px; color: #64748b;">Psychomotor Skills</h4>
+                            <div id="psychomotor-list" style="display: flex; flex-direction: column; gap: 8px;">
+                                <!-- Dynamic rows added by JS -->
+                            </div>
+                            <button type="button" onclick="addTraitRow('psychomotor-list')" class="btn-outline" style="margin-top: 10px; font-size: 11px; width: 100%;">+ Add Psychomotor Skill</button>
+                        </div>
+                    </div>
+                    <div style="margin-top: 10px; font-size: 11px; color: #94a3b8; font-style: italic;">
+                        Rating Scale: 5 (Excellent), 4 (Very Good), 3 (Good), 2 (Fair), 1 (Poor)
+                    </div>
+                </div>
+
                 <div class="input-group">
                     <div class="subject-container">
                         <select id="subjectSelect" required>
