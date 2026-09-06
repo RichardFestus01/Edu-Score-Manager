@@ -14,6 +14,7 @@
             <p>Input CA (30%) and Exam (70%) scores to generate results.</p>
         </header>
 
+
         <section class="form-card">
             <h2 style="font-size: 1rem; margin-bottom: 15px; color: var(--primary-color);">School Information</h2>
             <div class="settings-grid">
@@ -46,26 +47,156 @@
             </div>
         </section>
 
+
         <section class="form-card">
             <form id="result-form">
                 <h2 style="font-size: 1rem; margin-bottom: 15px; color: var(--primary-color);">Student Information</h2>
+
                 <div class="student-header">
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                        <!-- Name (always required) -->
                         <input type="text" id="studentName" placeholder="Student Name" required list="studentNamesList" style="flex: 2; min-width: 200px;">
-                        <input type="text" id="regNo" placeholder="Reg No/ID" style="flex: 1; min-width: 120px;">
-                        <select id="gender" style="flex: 1; min-width: 100px;">
+
+                        <!-- Reg No -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="regNo">
+                            Reg
+                        </label>
+                        <input type="text" id="regNo" placeholder="Reg No/ID" style="flex: 1; min-width: 120px;" disabled>
+
+                        <!-- Gender -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="gender">
+                            Gender
+                        </label>
+                        <select id="gender" style="flex: 1; min-width: 100px;" disabled>
                             <option value="" disabled selected>Gender</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </select>
-                        <input type="number" id="age" placeholder="Age" style="flex: 0.5; min-width: 70px;">
-                        <input type="text" id="stateOfOrigin" placeholder="State" style="flex: 1; min-width: 120px;">
-                        <input type="text" id="height" placeholder="H (cm)" style="flex: 0.5; min-width: 80px;">
-                        <input type="text" id="weight" placeholder="W (kg)" style="flex: 0.5; min-width: 80px;">
+
+                        <!-- Age -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="age">
+                            Age
+                        </label>
+                        <input type="number" id="age" placeholder="Age" style="flex: 0.5; min-width: 70px;" disabled>
+
+                        <!-- State -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="stateOfOrigin">
+                            State
+                        </label>
+                        <select id="stateOfOrigin" style="flex: 1; min-width: 140px;" disabled>
+                            <option value="" disabled selected>State</option>
+                            <option value="Abia">Abia</option>
+                            <option value="Adamawa">Adamawa</option>
+                            <option value="Akwa Ibom">Akwa Ibom</option>
+                            <option value="Anambra">Anambra</option>
+                            <option value="Bauchi">Bauchi</option>
+                            <option value="Bayelsa">Bayelsa</option>
+                            <option value="Benue">Benue</option>
+                            <option value="Borno">Borno</option>
+                            <option value="Cross River">Cross River</option>
+                            <option value="Delta">Delta</option>
+                            <option value="Ebonyi">Ebonyi</option>
+                            <option value="Edo">Edo</option>
+                            <option value="Ekiti">Ekiti</option>
+                            <option value="Enugu">Enugu</option>
+                            <option value="FCT">FCT</option>
+                            <option value="Gombe">Gombe</option>
+                            <option value="Imo">Imo</option>
+                            <option value="Jigawa">Jigawa</option>
+                            <option value="Kaduna">Kaduna</option>
+                            <option value="Kano">Kano</option>
+                            <option value="Katsina">Katsina</option>
+                            <option value="Kebbi">Kebbi</option>
+                            <option value="Kogi">Kogi</option>
+                            <option value="Kwara">Kwara</option>
+                            <option value="Lagos">Lagos</option>
+                            <option value="Nasarawa">Nasarawa</option>
+                            <option value="Niger">Niger</option>
+                            <option value="Ogun">Ogun</option>
+                            <option value="Ondo">Ondo</option>
+                            <option value="Osun">Osun</option>
+                            <option value="Oyo">Oyo</option>
+                            <option value="Plateau">Plateau</option>
+                            <option value="Rivers">Rivers</option>
+                            <option value="Sokoto">Sokoto</option>
+                            <option value="Taraba">Taraba</option>
+                            <option value="Yobe">Yobe</option>
+                            <option value="Zamfara">Zamfara</option>
+                        </select>
+
+                        <!-- LGA: select + text input -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="lgaOfOrigin">
+                            LGA
+                        </label>
+                        <select id="lgaSelect" style="flex: 1; min-width: 140px;" disabled>
+                            <option value="" disabled selected>LGA</option>
+                            <!-- Filled dynamically by JS based on state -->
+                            <option value="Other">Other...</option>
+                        </select>
+                        <input type="text" id="lgaOfOrigin" placeholder="Type LGA" style="flex: 1; min-width: 140px; display:none;" disabled>
+
+                        <!-- Height: select + text input + display in cm / m -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="height">
+                            Height
+                        </label>
+                        <select id="heightSelect" style="flex: 0.7; min-width: 90px;" disabled>
+                            <option value="" disabled selected>Height</option>
+                            <option value="90">90 cm</option>
+                            <option value="100">100 cm</option>
+                            <option value="110">110 cm</option>
+                            <option value="120">120 cm</option>
+                            <option value="130">130 cm</option>
+                            <option value="140">140 cm</option>
+                            <option value="150">150 cm</option>
+                            <option value="160">160 cm</option>
+                            <option value="170">170 cm</option>
+                            <option value="180">180 cm</option>
+                            <option value="190">190 cm</option>
+                            <option value="200">200 cm</option>
+                            <option value="Other">Other...</option>
+                        </select>
+                        <input type="text" id="height" placeholder="cm" style="flex: 0.5; min-width: 70px; display:none;" disabled>
+                        <span id="heightDisplay" style="flex: 1; min-width: 120px; font-size: 12px; color: #64748b; display:none;">0 cm / 0.00 m</span>
+
+                        <!-- Weight: select + text input -->
+                        <label style="display:flex; align-items:center; gap:4px; font-size:12px;">
+                            <input type="checkbox" class="bio-toggle" data-target="weight">
+                            Weight
+                        </label>
+                        <select id="weightSelect" style="flex: 0.6; min-width: 90px;" disabled>
+                            <option value="" disabled selected>Weight</option>
+                            <option value="20">20 kg</option>
+                            <option value="25">25 kg</option>
+                            <option value="30">30 kg</option>
+                            <option value="35">35 kg</option>
+                            <option value="40">40 kg</option>
+                            <option value="45">45 kg</option>
+                            <option value="50">50 kg</option>
+                            <option value="55">55 kg</option>
+                            <option value="60">60 kg</option>
+                            <option value="65">65 kg</option>
+                            <option value="70">70 kg</option>
+                            <option value="75">75 kg</option>
+                            <option value="80">80 kg</option>
+                            <option value="85">85 kg</option>
+                            <option value="90">90 kg</option>
+                            <option value="95">95 kg</option>
+                            <option value="100">100 kg</option>
+                            <option value="Other">Other...</option>
+                        </select>
+                        <input type="text" id="weight" placeholder="kg" style="flex: 0.6; min-width: 80px; display:none;" disabled>
+
                         <button type="button" id="clearNameBtn" class="btn-outline" style="width: auto; padding: 0 15px;">Clear</button>
                     </div>
                     <datalist id="studentNamesList"></datalist>
                 </div>
+
 
                 <!-- Domain Ratings Section -->
                 <div class="traits-container" style="margin: 20px 0; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
@@ -89,7 +220,28 @@
                     <div style="margin-top: 10px; font-size: 11px; color: #94a3b8; font-style: italic;">
                         Rating Scale: 5 (Excellent), 4 (Very Good), 3 (Good), 2 (Fair), 1 (Poor)
                     </div>
+
+                    <!-- Update Bio & Traits Button -->
+                    <button type="button" id="updateBioTraitsBtn" style="margin-top: 15px; padding: 8px 12px; background: #10b981; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">
+                        Update Bio & Traits
+                    </button>
                 </div>
+
+
+                <!-- Class Teacher Remark (Optional) -->
+                <div style="margin: 15px 0; padding: 12px; background: #f1f5f9; border-radius: 6px; border: 1px solid #e2e8f0;">
+                    <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                        <input type="checkbox" id="teacherRemarkToggle" style="width:auto;">
+                        <label for="teacherRemarkToggle" style="font-size:13px; font-weight:600; color:#334155; cursor:pointer;">Class Teacher Remark (Optional)</label>
+                    </div>
+                    <textarea id="teacherRemark" rows="2" placeholder="Enter remark for this student (optional)" style="width:100%; padding:6px; border:1px solid #cbd5e1; border-radius:4px; font-size:13px; display:none;" disabled></textarea>
+
+                    <!-- Update Teacher Remark Button -->
+                    <button type="button" id="updateTeacherRemarkBtn" style="margin-top: 10px; padding: 6px 10px; background: #0ea5e9; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600;">
+                        Update Teacher Remark
+                    </button>
+                </div>
+
 
                 <div class="input-group">
                     <div class="subject-container">
@@ -141,6 +293,7 @@
             </form>
         </section>
 
+
         <section class="table-card">
             <table id="results-table">
                 <thead>
@@ -165,6 +318,7 @@
             <button id="download-csv" class="btn-secondary">Download Current Class CSV</button>
             <button id="download-all-csv" class="btn-secondary" style="margin-top: 10px;">Download Overall CSV (All Classes)</button>
         </section>
+
 
         <footer>
             <p>Designed & Developed by Emuemukoro Festus | April 2026</p>
